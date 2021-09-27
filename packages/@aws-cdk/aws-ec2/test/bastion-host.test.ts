@@ -1,4 +1,4 @@
-import '@aws-cdk/assert-internal/jest';
+import { Template } from '@aws-cdk/assertions';
 import { Stack } from '@aws-cdk/core';
 import { BastionHostLinux, BlockDeviceVolume, InstanceClass, InstanceSize, InstanceType, SubnetType, Vpc } from '../lib';
 
@@ -14,7 +14,7 @@ describe('bastion host', () => {
     });
 
     // THEN
-    expect(stack).toHaveResource('AWS::EC2::Instance', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Instance', {
       InstanceType: 't3.nano',
       SubnetId: { Ref: 'VPCPrivateSubnet1Subnet8BCA10E0' },
     });
@@ -39,7 +39,7 @@ describe('bastion host', () => {
     });
 
     // THEN
-    expect(stack).toHaveResource('AWS::EC2::Instance', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Instance', {
       InstanceType: 't3.nano',
       SubnetId: { Ref: 'VPCIsolatedSubnet1SubnetEBD00FC6' },
     });
@@ -70,7 +70,7 @@ describe('bastion host', () => {
     });
 
     // THEN
-    expect(stack).toHaveResource('AWS::EC2::Instance', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Instance', {
       BlockDeviceMappings: [
         {
           DeviceName: 'EBSBastionHost',
@@ -95,7 +95,7 @@ describe('bastion host', () => {
     });
 
     // THEN
-    expect(stack).toHaveResource('AWS::EC2::Instance', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Instance', {
       ImageId: {
         Ref: 'SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter',
       },
@@ -115,7 +115,7 @@ describe('bastion host', () => {
     });
 
     // THEN
-    expect(stack).toHaveResource('AWS::EC2::Instance', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Instance', {
       ImageId: {
         Ref: 'SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmarm64gp2C96584B6F00A464EAD1953AFF4B05118Parameter',
       },

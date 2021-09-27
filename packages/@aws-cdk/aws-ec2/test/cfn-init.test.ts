@@ -1,13 +1,13 @@
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import { arrayWith, ResourcePart, stringLike } from '@aws-cdk/assert-internal';
-import '@aws-cdk/assert-internal/jest';
+import { Match, Template } from '@aws-cdk/assertions';
 import * as iam from '@aws-cdk/aws-iam';
 import * as s3 from '@aws-cdk/aws-s3';
 import { Asset } from '@aws-cdk/aws-s3-assets';
 import { AssetStaging, App, Aws, CfnResource, Stack, DefaultStackSynthesizer, IStackSynthesizer, FileAssetSource, FileAssetLocation } from '@aws-cdk/core';
 import * as ec2 from '../lib';
+import { stringLike } from './matchers';
 
 let app: App;
 let stack: Stack;
@@ -297,9 +297,9 @@ describe('assets n buckets', () => {
     init.attach(resource, linuxOptions());
 
     // THEN
-    expect(stack).toHaveResource('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
-        Statement: arrayWith(ASSET_STATEMENT),
+        Statement: Match.arrayWith([ASSET_STATEMENT]),
         Version: '2012-10-17',
       },
     });
@@ -351,9 +351,9 @@ describe('assets n buckets', () => {
     init.attach(resource, linuxOptions());
 
     // THEN
-    expect(stack).toHaveResource('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
-        Statement: arrayWith(ASSET_STATEMENT),
+        Statement: Match.arrayWith([ASSET_STATEMENT]),
         Version: '2012-10-17',
       },
     });
@@ -397,16 +397,16 @@ describe('assets n buckets', () => {
     init.attach(resource, linuxOptions());
 
     // THEN
-    expect(stack).toHaveResource('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
-        Statement: arrayWith({
+        Statement: Match.arrayWith([{
           Action: ['s3:GetObject*', 's3:GetBucket*', 's3:List*'],
           Effect: 'Allow',
           Resource: [
             { 'Fn::Join': ['', ['arn:', { Ref: 'AWS::Partition' }, ':s3:::my-bucket']] },
             { 'Fn::Join': ['', ['arn:', { Ref: 'AWS::Partition' }, ':s3:::my-bucket/file.js']] },
           ],
-        }),
+        }]),
         Version: '2012-10-17',
       },
     });
@@ -440,16 +440,16 @@ describe('assets n buckets', () => {
     init.attach(resource, linuxOptions());
 
     // THEN
-    expect(stack).toHaveResource('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
-        Statement: arrayWith({
+        Statement: Match.arrayWith([{
           Action: ['s3:GetObject*', 's3:GetBucket*', 's3:List*'],
           Effect: 'Allow',
           Resource: [
             { 'Fn::Join': ['', ['arn:', { Ref: 'AWS::Partition' }, ':s3:::my-bucket']] },
             { 'Fn::Join': ['', ['arn:', { Ref: 'AWS::Partition' }, ':s3:::my-bucket/file.zip']] },
           ],
-        }),
+        }]),
         Version: '2012-10-17',
       },
     });
@@ -512,10 +512,10 @@ describe('assets n buckets', () => {
         S3AccessCreds: {
           type: 'S3',
           roleName: { Ref: 'InstanceRole3CCE2F1D' },
-          buckets: arrayWith(
+          buckets: Match.arrayWith([
             { Ref: stringLike('AssetParameters*S3Bucket*') },
             'my-bucket',
-          ),
+          ]),
         },
       },
     });
@@ -591,9 +591,9 @@ function linuxOptions() {
 }
 
 function expectMetadataLike(pattern: any) {
-  expect(stack).toHaveResourceLike('CDK::Test::Resource', {
+  Template.fromStack(stack).hasResource('CDK::Test::Resource', {
     Metadata: pattern,
-  }, ResourcePart.CompleteDefinition);
+  });
 }
 
 function expectLine(lines: string[], re: RegExp) {

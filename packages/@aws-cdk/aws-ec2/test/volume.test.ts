@@ -1,8 +1,4 @@
-import '@aws-cdk/assert-internal/jest';
-import {
-  arrayWith,
-  ResourcePart,
-} from '@aws-cdk/assert-internal';
+import { Match, Template } from '@aws-cdk/assertions';
 import {
   AccountRootPrincipal,
   Role,
@@ -34,7 +30,7 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResource('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       AvailabilityZone: 'us-east-1a',
       MultiAttachEnabled: false,
       Size: 8,
@@ -45,11 +41,11 @@ describe('volume', () => {
           Value: 'MyVolume',
         },
       ],
-    }, ResourcePart.Properties);
+    });
 
-    expect(stack).toHaveResource('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResource('AWS::EC2::Volume', {
       DeletionPolicy: 'Retain',
-    }, ResourcePart.CompleteDefinition);
+    });
   });
 
   test('fromVolumeAttributes', () => {
@@ -85,7 +81,7 @@ describe('volume', () => {
     cdk.Tags.of(volume).add('TagKey', 'TagValue');
 
     // THEN
-    expect(stack).toHaveResource('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       AvailabilityZone: 'us-east-1a',
       MultiAttachEnabled: false,
       Size: 8,
@@ -94,7 +90,7 @@ describe('volume', () => {
         Key: 'TagKey',
         Value: 'TagValue',
       }],
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -111,9 +107,9 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       AutoEnableIO: true,
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -130,9 +126,9 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       Encrypted: true,
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -151,7 +147,7 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       Encrypted: true,
       KmsKeyId: {
         'Fn::GetAtt': [
@@ -159,8 +155,8 @@ describe('volume', () => {
           'Arn',
         ],
       },
-    }, ResourcePart.Properties);
-    expect(stack).toHaveResourceLike('AWS::KMS::Key', {
+    });
+    Template.fromStack(stack).hasResourceProperties('AWS::KMS::Key', {
       KeyPolicy: {
         Statement: [
           {},
@@ -233,7 +229,7 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::KMS::Key', {
+    Template.fromStack(stack).hasResourceProperties('AWS::KMS::Key', {
       KeyPolicy: {
         Statement: [
           {},
@@ -264,10 +260,10 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       Iops: 500,
       VolumeType: 'io1',
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -286,9 +282,9 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       MultiAttachEnabled: true,
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -304,9 +300,9 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       SnapshotId: 'snap-00000000',
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -323,9 +319,9 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       VolumeType: 'standard',
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -343,9 +339,9 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       VolumeType: 'io1',
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -363,9 +359,9 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       VolumeType: 'io2',
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -382,9 +378,9 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       VolumeType: 'gp2',
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -401,9 +397,9 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       VolumeType: 'gp3',
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -420,9 +416,9 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       VolumeType: 'st1',
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -439,9 +435,9 @@ describe('volume', () => {
     });
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       VolumeType: 'sc1',
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -459,7 +455,7 @@ describe('volume', () => {
     volume.grantAttachVolume(role);
 
     // THEN
-    expect(stack).toHaveResource('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
         Version: '2012-10-17',
         Statement: [{
@@ -536,7 +532,7 @@ describe('volume', () => {
       volume.grantAttachVolume(role);
 
       // THEN
-      expect(stack).toHaveResourceLike('AWS::KMS::Key', {
+      Template.fromStack(stack).hasResourceProperties('AWS::KMS::Key', {
         KeyPolicy: {
           Statement: [
             {},
@@ -597,9 +593,9 @@ describe('volume', () => {
       volume.grantAttachVolume(role);
 
       // THEN
-      expect(stack).toHaveResourceLike('AWS::IAM::Policy', {
+      Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
         PolicyDocument: {
-          Statement: arrayWith({
+          Statement: Match.arrayWith([{
             Effect: 'Allow',
             Action: 'kms:CreateGrant',
             Condition: {
@@ -628,7 +624,7 @@ describe('volume', () => {
                 'Arn',
               ],
             },
-          }),
+          }]),
         },
       });
 
@@ -670,7 +666,7 @@ describe('volume', () => {
     volume.grantAttachVolume(role);
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
         Version: '2012-10-17',
         Statement: [
@@ -738,7 +734,7 @@ describe('volume', () => {
     volume.grantAttachVolume(role, [instance1, instance2]);
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
         Version: '2012-10-17',
         Statement: [{
@@ -819,7 +815,7 @@ describe('volume', () => {
     volume.grantAttachVolumeByResourceTag(instance.grantPrincipal, [instance]);
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
         Version: '2012-10-17',
         Statement: [{
@@ -856,15 +852,15 @@ describe('volume', () => {
         }],
       },
     });
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       Tags: [
         {
           Key: 'VolumeGrantAttach-B2376B2BDA',
           Value: 'b2376b2bda65cb40f83c290dd844c4aa',
         },
       ],
-    }, ResourcePart.Properties);
-    expect(stack).toHaveResourceLike('AWS::EC2::Instance', {
+    });
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Instance', {
       Tags: [
         {},
         {
@@ -872,7 +868,7 @@ describe('volume', () => {
           Value: 'b2376b2bda65cb40f83c290dd844c4aa',
         },
       ],
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -896,7 +892,7 @@ describe('volume', () => {
     volume.grantAttachVolumeByResourceTag(instance.grantPrincipal, [instance], 'TestSuffix');
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
         Version: '2012-10-17',
         Statement: [{
@@ -933,15 +929,15 @@ describe('volume', () => {
         }],
       },
     });
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       Tags: [
         {
           Key: 'VolumeGrantAttach-TestSuffix',
           Value: 'b2376b2bda65cb40f83c290dd844c4aa',
         },
       ],
-    }, ResourcePart.Properties);
-    expect(stack).toHaveResourceLike('AWS::EC2::Instance', {
+    });
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Instance', {
       Tags: [
         {},
         {
@@ -949,7 +945,7 @@ describe('volume', () => {
           Value: 'b2376b2bda65cb40f83c290dd844c4aa',
         },
       ],
-    }, ResourcePart.Properties);
+    });
 
   });
 
@@ -966,7 +962,7 @@ describe('volume', () => {
     volume.grantDetachVolume(role);
 
     // THEN
-    expect(stack).toHaveResource('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
         Version: '2012-10-17',
         Statement: [{
@@ -1049,7 +1045,7 @@ describe('volume', () => {
     volume.grantDetachVolume(role, [instance1, instance2]);
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
         Version: '2012-10-17',
         Statement: [{
@@ -1130,7 +1126,7 @@ describe('volume', () => {
     volume.grantDetachVolumeByResourceTag(instance.grantPrincipal, [instance]);
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
         Version: '2012-10-17',
         Statement: [{
@@ -1167,15 +1163,15 @@ describe('volume', () => {
         }],
       },
     });
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       Tags: [
         {
           Key: 'VolumeGrantDetach-B2376B2BDA',
           Value: 'b2376b2bda65cb40f83c290dd844c4aa',
         },
       ],
-    }, ResourcePart.Properties);
-    expect(stack).toHaveResourceLike('AWS::EC2::Instance', {
+    });
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Instance', {
       Tags: [
         {},
         {
@@ -1183,7 +1179,7 @@ describe('volume', () => {
           Value: 'b2376b2bda65cb40f83c290dd844c4aa',
         },
       ],
-    }, ResourcePart.Properties);
+    });
 
 
   });
@@ -1207,7 +1203,7 @@ describe('volume', () => {
     volume.grantDetachVolumeByResourceTag(instance.grantPrincipal, [instance], 'TestSuffix');
 
     // THEN
-    expect(stack).toHaveResourceLike('AWS::IAM::Policy', {
+    Template.fromStack(stack).hasResourceProperties('AWS::IAM::Policy', {
       PolicyDocument: {
         Version: '2012-10-17',
         Statement: [{
@@ -1244,15 +1240,15 @@ describe('volume', () => {
         }],
       },
     });
-    expect(stack).toHaveResourceLike('AWS::EC2::Volume', {
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Volume', {
       Tags: [
         {
           Key: 'VolumeGrantDetach-TestSuffix',
           Value: 'b2376b2bda65cb40f83c290dd844c4aa',
         },
       ],
-    }, ResourcePart.Properties);
-    expect(stack).toHaveResourceLike('AWS::EC2::Instance', {
+    });
+    Template.fromStack(stack).hasResourceProperties('AWS::EC2::Instance', {
       Tags: [
         {},
         {
@@ -1260,7 +1256,7 @@ describe('volume', () => {
           Value: 'b2376b2bda65cb40f83c290dd844c4aa',
         },
       ],
-    }, ResourcePart.Properties);
+    });
 
   });
 
